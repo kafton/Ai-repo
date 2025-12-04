@@ -1,12 +1,9 @@
 name: AI Evolver
 
 on:
-  workflow_dispatch:     # manual run button
   schedule:
-    - cron: "0 */6 * * *"   # runs every 6 hours
-
-permissions:
-  contents: write
+    - cron: "0 */6 * * *"  # every 6 hours
+  workflow_dispatch:
 
 jobs:
   evolve:
@@ -23,7 +20,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install requirements (safe)
+      - name: Install dependencies
         run: |
           pip install requests wikipedia duckduckgo_search
 
@@ -31,7 +28,7 @@ jobs:
         run: |
           echo "Running AI Evolver..."
           python3 ai_main.py
-          python3 ai_system/rewrite_engine.py || true
+          python3 ai_system/rewrite_engine.py
 
       - name: Commit changes
         run: |
