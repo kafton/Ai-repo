@@ -2,7 +2,7 @@ name: AI Evolver
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # every 6 hours
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -10,30 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      - name: Install dependencies
-        run: |
-          pip install requests wikipedia duckduckgo_search
+    - name: Install dependencies
+      run: |
+        pip install requests wikipedia duckduckgo_search
 
-      - name: Run AI Evolver
-        run: |
-          echo "Running AI Evolver..."
-          python3 ai_main.py
-          python3 ai_system/rewrite_engine.py
+    - name: Run AI Evolver loop
+      run: |
+        echo "Running AI Evolver..."
+        python ai_main.py
 
-      - name: Commit changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "AI evolved automatically" || echo "No changes"
-          git push
+    - name: Run Rewrite Engine
+      run: python ai_system/core/rewrite_engine.py   # ← FIXED PATH
+
+    - name: Commit changes
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "AI evolved automatically" || echo "No changes"
+        git push
