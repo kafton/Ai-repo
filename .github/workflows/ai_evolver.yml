@@ -28,7 +28,8 @@ jobs:
         python ai_main.py
 
     - name: Run Rewrite Engine
-      run: python ai_system/core/rewrite_engine.py   # ← FIXED PATH
+      run: python -m ai_system.core.rewrite_engine
+   # ← FIXED PATH
 
     - name: Commit changes
       run: |
